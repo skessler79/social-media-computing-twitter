@@ -5,7 +5,10 @@ import json
 import config
 
 # Change this
-USERNAME = "TheBabylonBee"
+# USERNAME = "TheBabylonBee"
+# USERNAME = "HardDriveMag"
+# USERNAME = "Reductress"
+USERNAME = "TheOnion"
 
 def get_tweets(api, username, count=200, oldest_id=-1):
     if oldest_id == -1:
@@ -36,7 +39,7 @@ def main():
         oldest_id = all_tweets[-1]["id"] - 1
         print(f"{len(all_tweets)} tweets retrieved")
     
-    with open(f"UserTimeline_{USERNAME}.json", 'w') as f:
+    with open(f"data/UserTimeline_{USERNAME}.json", 'w') as f:
         json.dump(all_tweets, f)
     
     # # You can load the json into a pandas dataframe with:
