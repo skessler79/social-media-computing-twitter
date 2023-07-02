@@ -54,6 +54,13 @@ fig = px.bar(views_by_category, x='username', y='views', color='username')
 # Show the chart
 st.plotly_chart(fig)
 
+# Creating the boxplot
+fig = px.box(filtered_data_views, x='username', y='views', color='username', points=False)
+
+# Show the chart
+st.plotly_chart(fig)
+
+
 # Tweet Counts by Time 
 st.header("Tweet Counts by Time")
 st.text("The number of tweets that were published.")
