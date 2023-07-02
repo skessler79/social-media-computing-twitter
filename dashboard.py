@@ -7,6 +7,7 @@ import os
 import re
 
 data = pd.read_csv('data_with_metrics.csv')
+data_views = pd.read_csv('data_views.csv')
 
 st.title("Satire News Website Social Media Monitor")
 
@@ -29,17 +30,9 @@ st.plotly_chart(fig)
 
 # Tweet Sentiment Score histogram 
 st.header("Tweet Sentiment Score histogram")
-# hourly_sum = filtered_data.groupby(['hour_of_day', 'username'])['tweet_VADER_sentiment'].sum().reset_index(name='Sum')
 
 # fig = px.bar(hourly_sum, x='hour_of_day', y='Sum', color='username', barmode='group')
 fig = px.histogram(filtered_data, x='tweet_VADER_sentiment', nbins=10)
-# fig.update_layout(
-#     xaxis_title='Hour',
-#     yaxis_title='Sum',
-#     height=600,  
-#     width=800,
-#     margin=dict(t=50)  
-# )
 
 st.plotly_chart(fig)
 
@@ -47,10 +40,23 @@ st.plotly_chart(fig)
 group_name2 = data['username'].unique()
 selected_name = st.multiselect('Select a group', group_name2)
 filtered_data = data[data['username'].isin(selected_name)]
+filtered_data_views = data_views[data_views['username'].isin(selected_name)]
+
+# Impressions by Time
+st.header("Total Impressions")
+st.text("Measures the number of views the tweets were seen on Twitter.")
+# Grouping the data by category and calculating the total views
+views_by_category = filtered_data_views.groupby('username')['views'].sum().reset_index()
+
+# Creating the bar chart
+fig = px.bar(views_by_category, x='username', y='views', color='username')
+
+# Show the chart
+st.plotly_chart(fig)
 
 # Tweet Counts by Time 
 st.header("Tweet Counts by Time")
-
+st.text("The number of tweets that were published.")
 hourly_counts = filtered_data.groupby(['hour_of_day', 'username']).size().reset_index(name='Count')
 
 fig = px.bar(hourly_counts, x='hour_of_day', y='Count', color='username', barmode='group')
@@ -66,7 +72,9 @@ st.plotly_chart(fig)
 
 
 # Total Average Engagement by Time
-st.header("Total Average Engagement by Time")
+st.header("Total Average Engagement Rate by Time")
+st.subheader("Measures the number of engagements a tweet gets, to the total number of followers, in each hour") 
+st.text("Formula: Average Engagement Rate = (likes + shares) / (total followers)")
 hourly_sum = filtered_data.groupby(['hour_of_day', 'username'])['avg_engagement_rate'].sum().reset_index(name='Sum')
 
 fig = px.bar(hourly_sum, x='hour_of_day', y='Sum', color='username', barmode='group')
@@ -82,6 +90,8 @@ st.plotly_chart(fig)
 
 # Total Amplification Rate by Time
 st.header("Total Amplification Rate by Time")
+st.subheader("Measures the total number of engagements a tweet gets, to the total number of followers, in each hour") 
+st.text("Formula: Amplification Rate = (shares) / (total followers)")
 hourly_sum = filtered_data.groupby(['hour_of_day', 'username'])['amplification_rate'].sum().reset_index(name='Sum')
 
 fig = px.bar(hourly_sum, x='hour_of_day', y='Sum', color='username', barmode='group')
