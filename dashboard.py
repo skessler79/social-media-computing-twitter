@@ -31,8 +31,8 @@ st.plotly_chart(fig)
 # Tweet Sentiment Score histogram 
 st.header("Tweet Sentiment Score histogram")
 
-# fig = px.bar(hourly_sum, x='hour_of_day', y='Sum', color='username', barmode='group')
-fig = px.histogram(filtered_data, x='tweet_VADER_sentiment', nbins=10)
+fig = px.histogram(filtered_data, x='tweet_VADER_sentiment', title=f"{selected_group}", nbins=10)
+
 
 st.plotly_chart(fig)
 
